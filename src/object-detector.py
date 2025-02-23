@@ -32,7 +32,7 @@ while cam.isOpened():
     
     # Display the count of persons on the frame 
     cv2.putText(annotated_frame, f"Persons detected: {persons}", (10, 30), # corresponds to position
-                cv2.FONT_ITALIC, 1, (255, 0, 255), 2, cv2.LINE_AA) #c2.LINE_AA ensures text is not aliased
+                cv2.FONT_ITALIC, 1, (255, 0, 0), 2, cv2.LINE_AA) #c2.LINE_AA ensures text is not aliased
     
     # Display instructions to quit
     cv2.putText(annotated_frame, f"To exit press 'q' on your keyboard", (10, 70), # corresponds to position
