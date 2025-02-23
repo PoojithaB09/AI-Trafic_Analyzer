@@ -1,5 +1,7 @@
 from ultralytics import YOLO
 import cv2
+import pandas as pd
+from datetime import datetime
 
 # Load YOLOv8 model
 model = YOLO("yolov8m.pt")
@@ -11,6 +13,9 @@ cam = cv2.VideoCapture(0)
 # Set window name
 window_name = "YOLOv8 Real-Time Detection"
 
+# Create an empty list to store foot traffic data
+data = []
+    
 while cam.isOpened():
     read, frame = cam.read()  # Read video frame and return if successfully read
     if not read:
@@ -19,6 +24,17 @@ while cam.isOpened():
     # Run YOLOv8 on the frame and detect objects in real time with a confidence interval of 0.5
     # This confidence interval filters out weak detections
     results = model(frame, conf=0.5)
+    
+    persons = sum(1 for result in results[0].boxes if result.cls[0] == 0)
+
+    # Log timestamp and foot traffic count
+    data.append({"timestamp": datetime.now(), "count": persons})
+
+    # Annotate frame and display (same as before)
+    
+    # Convert to DataFrame
+    df = pd.DataFrame(data)
+    df.to_csv("foot_traffic.csv", index=False)
 
     # Count the number of persons detected (class '0' corresponds to 'person')
     persons = 0
@@ -46,9 +62,6 @@ while cam.isOpened():
         break
     
     
-    
-    
-
 # Release resources
 cam.release()
 cv2.destroyAllWindows()
